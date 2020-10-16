@@ -1,0 +1,12 @@
+include: package:lint/analysis_options.yaml
+
+# linter:
+#   rules:
+
+
+analyzer:
+    exclude:
+      - "**/*.g.dart"
+#   errors:
+#     argument_type_not_assignable: ignore
+#     missing_required_param: error
