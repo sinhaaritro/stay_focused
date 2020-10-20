@@ -16,7 +16,7 @@ class ReportByDateModel {
       totalTimeConcentrated =
           totalTimeConcentrated + report.totalTimeConcentrated;
     }
-    totalTimeConcentrated = (totalTimeConcentrated / reportList.length) as int;
+    totalTimeConcentrated = totalTimeConcentrated / reportList.length as int;
   }
 
   void _getReportDate() {

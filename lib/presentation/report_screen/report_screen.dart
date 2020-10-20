@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/report_by_time_model.dart';
+
 import '../../domain/report_by_date_model.dart';
+import '../../domain/report_by_time_model.dart';
 
 class ReportsScreen extends StatelessWidget {
   final List<ReportByDateModel> reportDateList = [];
