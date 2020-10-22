@@ -46,7 +46,8 @@ class TimerScreen extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
-                    child: Text("No Timer's Added",
+                    child: Text("No Timer's\nAdd Timers to View Here",
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline6),
                   ),
                 );
@@ -68,17 +69,26 @@ class TimerScreen extends StatelessWidget {
             },
           ),
           ElevatedButton(
-            onPressed: () {
-              // ignore: close_sinks
+            onPressed: () async {
+              final TimeOfDay pickededTime = await _pickDate(context);
+              final DateTime pseudoDateAdded =
+                  DateTime(2020, 1, 31, pickededTime.hour, pickededTime.minute);
               final addNewTimer = context.bloc<TimerBloc>();
-              addNewTimer
-                  .add(AddTimerEvent(TimerModel(DateTime(2017, 9, 7, 17, 30))));
+              addNewTimer.add(AddTimerEvent(TimerModel(pseudoDateAdded)));
             },
             child: const Text("Add New Timer"),
           ),
         ],
       ),
     );
+  }
+
+  Future<TimeOfDay> _pickDate(context) async {
+    final TimeOfDay selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    return selectedTime;
   }
 }
 
@@ -104,26 +114,12 @@ class UpcomingTimerCard extends StatelessWidget {
               children: [
                 Text("$startTime - $endTime",
                     style: Theme.of(context).textTheme.headline6),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        //TODO: Add Change Dialog
-                        // ignore: close_sinks
-                        final updateTimer = context.bloc<TimerBloc>();
-                        updateTimer.add(UpdateTimerEvent(upComingTimer));
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        // ignore: close_sinks
-                        final deleteTimer = context.bloc<TimerBloc>();
-                        deleteTimer.add(DeleteTimerEvent(upComingTimer));
-                      },
-                    ),
-                  ],
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    final deleteTimer = context.bloc<TimerBloc>();
+                    deleteTimer.add(DeleteTimerEvent(upComingTimer));
+                  },
                 ),
               ],
             ),

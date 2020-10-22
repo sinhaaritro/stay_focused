@@ -37,6 +37,7 @@ class MyMaterialApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),
     );

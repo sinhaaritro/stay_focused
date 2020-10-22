@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/local_bloc/local_db_bloc.dart';
 import '../../bloc/timer_bloc/timer_bloc.dart';
 import '../../infrastructure/local_db/moor_database.dart';
-import '../../infrastructure/timer/timer_repository.dart';
+import '../../infrastructure/timer_repository/timer_repository.dart';
 import '../report_screen/report_screen.dart';
 import '../timer_screen/timer_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // ignore: close_sinks
     final localDatabase = BlocProvider.of<LocalDatabaseBloc>(context);
     return DefaultTabController(
       length: 2,

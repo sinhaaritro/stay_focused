@@ -25,9 +25,4 @@ class TimerRepository {
     final TimerTable deleteTimer = TimerTable(reportTime: timer.startTime);
     timerDao.deleteTimers(deleteTimer);
   }
-
-  void updateTimers(TimerModel timer) {
-    final TimerTable updateTimer = TimerTable(reportTime: timer.startTime);
-    timerDao.updateTimers(updateTimer);
-  }
 }

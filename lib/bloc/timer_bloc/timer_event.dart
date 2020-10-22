@@ -14,12 +14,6 @@ class AddTimerEvent extends TimerEvent {
   AddTimerEvent(this.addTimer);
 }
 
-class UpdateTimerEvent extends TimerEvent {
-  final TimerModel updateTimer;
-
-  UpdateTimerEvent(this.updateTimer);
-}
-
 class DeleteTimerEvent extends TimerEvent {
   final TimerModel deleteTimer;
 
