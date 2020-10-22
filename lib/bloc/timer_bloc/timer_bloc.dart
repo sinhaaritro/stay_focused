@@ -30,31 +30,49 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield TimerStateLoading();
 
       final List<TimerModel> timerList = await timerRepository.getTimers();
-      print(timerList.length);
       if (timerList.isEmpty) {
         yield TimerStateEmpty();
       } else {
         yield TimerStateLoaded(timerList);
       }
     } catch (_) {
-      yield TimerStateError();
+      yield TimerStateError("Problem with fetch data");
     }
   }
 
   Stream<TimerState> _mapAddTimersToState(AddTimerEvent event) async* {
     try {
-      timerRepository.addTimers(event.addTimer);
+      List<TimerModel> timerList = await timerRepository.getTimers();
+
+      //Validating
+      for (final timer in timerList) {
+        if (event.addTimer.startTime.isAtSameMomentAs(timer.startTime)) {
+          //Same Hour and Minute
+          yield TimerStateError("Timer with same value cant be added again");
+          break;
+        } else if (event.addTimer.startTime.isAfter(timer.startTime) &&
+                event.addTimer.startTime.isBefore(timer.endTime) ||
+            event.addTimer.endTime.isAfter(timer.startTime) &&
+                event.addTimer.endTime.isBefore(timer.endTime)) {
+          //Within 1hr
+          yield TimerStateError(
+              "Cant have two timers within 1 hour of each other");
+          break;
+        } else {
+          timerRepository.addTimers(event.addTimer);
+        }
+      }
 
       yield TimerStateLoading();
 
-      final List<TimerModel> timerList = await timerRepository.getTimers();
+      timerList = await timerRepository.getTimers();
       if (timerList.isEmpty) {
         yield TimerStateEmpty();
       } else {
         yield TimerStateLoaded(timerList);
       }
     } catch (_) {
-      yield TimerStateError();
+      yield TimerStateError("Problem with fetch data");
     }
   }
 
@@ -71,7 +89,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         yield TimerStateLoaded(timerList);
       }
     } catch (_) {
-      yield TimerStateError();
+      yield TimerStateError("Problem with fetch data");
     }
   }
 }

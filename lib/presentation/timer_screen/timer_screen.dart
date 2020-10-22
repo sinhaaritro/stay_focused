@@ -25,48 +25,50 @@ class TimerScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Text("Upcoming Timers of the Day",
               style: Theme.of(context).textTheme.headline5),
-          BlocBuilder<TimerBloc, TimerState>(
-            builder: (context, state) {
-              if (state is TimerStateLoading) {
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+          BlocListener<TimerBloc, TimerState>(
+            listener: (context, state) {
+              if (state is TimerStateError) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.timerError),
                   ),
                 );
-              } else if (state is TimerStateError) {
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text("Timer Error",
-                        style: Theme.of(context).textTheme.headline6),
-                  ),
-                );
-              } else if (state is TimerStateEmpty) {
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text("No Timer's\nAdd Timers to View Here",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline6),
-                  ),
-                );
-              } else if (state is TimerStateLoaded) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: state.upComingTimerList
-                      .map(
-                        (upComingTimer) => Flexible(
-                          child:
-                              UpcomingTimerCard(upComingTimer: upComingTimer),
-                        ),
-                      )
-                      .toList(),
-                );
-              } else {
-                return Container();
               }
             },
+            child: BlocBuilder<TimerBloc, TimerState>(
+              builder: (context, state) {
+                if (state is TimerStateLoading) {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (state is TimerStateEmpty) {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text("No Timer's\nAdd Timers to View Here",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline6),
+                    ),
+                  );
+                } else if (state is TimerStateLoaded) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: state.allTimerList
+                        .map(
+                          (allTimer) => Flexible(
+                            child: AllTimerCard(allTimer: allTimer),
+                          ),
+                        )
+                        .toList(),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -92,15 +94,15 @@ class TimerScreen extends StatelessWidget {
   }
 }
 
-class UpcomingTimerCard extends StatelessWidget {
-  final TimerModel upComingTimer;
+class AllTimerCard extends StatelessWidget {
+  final TimerModel allTimer;
 
-  const UpcomingTimerCard({Key key, this.upComingTimer}) : super(key: key);
+  const AllTimerCard({Key key, this.allTimer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final String startTime = DateFormat.jm().format(upComingTimer.startTime);
-    final String endTime = DateFormat.jm().format(upComingTimer.endTime);
+    final String startTime = DateFormat.jm().format(allTimer.startTime);
+    final String endTime = DateFormat.jm().format(allTimer.endTime);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -118,7 +120,7 @@ class UpcomingTimerCard extends StatelessWidget {
                   icon: const Icon(Icons.delete),
                   onPressed: () {
                     final deleteTimer = context.bloc<TimerBloc>();
-                    deleteTimer.add(DeleteTimerEvent(upComingTimer));
+                    deleteTimer.add(DeleteTimerEvent(allTimer));
                   },
                 ),
               ],

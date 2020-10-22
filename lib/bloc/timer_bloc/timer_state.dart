@@ -9,11 +9,15 @@ abstract class TimerState extends Equatable {
 class TimerStateLoading extends TimerState {}
 
 class TimerStateLoaded extends TimerState {
-  final List<TimerModel> upComingTimerList;
+  final List<TimerModel> allTimerList;
 
-  TimerStateLoaded(this.upComingTimerList);
+  TimerStateLoaded(this.allTimerList);
 }
 
 class TimerStateEmpty extends TimerState {}
 
-class TimerStateError extends TimerState {}
+class TimerStateError extends TimerState {
+  final String timerError;
+
+  TimerStateError(this.timerError);
+}
