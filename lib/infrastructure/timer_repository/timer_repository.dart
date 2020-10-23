@@ -17,12 +17,12 @@ class TimerRepository {
   }
 
   void addTimers(TimerModel timer) {
-    final TimerTable addTimer = TimerTable(reportTime: timer.startTime);
+    final TimerTable addTimer = TimerDto.fromDomain(timer);
     timerDao.insertTimers(addTimer);
   }
 
   void deleteTimers(TimerModel timer) {
-    final TimerTable deleteTimer = TimerTable(reportTime: timer.startTime);
+    final TimerTable deleteTimer = TimerDto.fromDomain(timer);
     timerDao.deleteTimers(deleteTimer);
   }
 }
