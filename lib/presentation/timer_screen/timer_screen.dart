@@ -14,7 +14,7 @@ class TimerScreen extends StatelessWidget {
       child: ListView(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.width * 3 / 4,
+            height: MediaQuery.of(context).size.width * 2 / 3,
             width: MediaQuery.of(context).size.width,
             child: Card(
               child: Center(
@@ -23,8 +23,7 @@ class TimerScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text("Upcoming Timers of the Day",
-              style: Theme.of(context).textTheme.headline5),
+          Text("All Timers", style: Theme.of(context).textTheme.headline5),
           BlocListener<TimerBloc, TimerState>(
             listener: (context, state) {
               if (state is TimerStateError) {
@@ -72,11 +71,13 @@ class TimerScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              final TimeOfDay pickededTime = await _pickDate(context);
-              final DateTime pseudoDateAdded =
-                  DateTime(2020, 1, 31, pickededTime.hour, pickededTime.minute);
-              final addNewTimer = context.bloc<TimerBloc>();
-              addNewTimer.add(AddTimerEvent(TimerModel(pseudoDateAdded)));
+              final TimeOfDay pickededTime = await _pickTime(context);
+              if (pickededTime != null) {
+                final DateTime pseudoDateAdded = DateTime(
+                    2020, 1, 31, pickededTime.hour, pickededTime.minute);
+                final addNewTimer = context.bloc<TimerBloc>();
+                addNewTimer.add(AddTimerEvent(TimerModel(pseudoDateAdded)));
+              }
             },
             child: const Text("Add New Timer"),
           ),
@@ -85,7 +86,7 @@ class TimerScreen extends StatelessWidget {
     );
   }
 
-  Future<TimeOfDay> _pickDate(context) async {
+  Future<TimeOfDay> _pickTime(context) async {
     final TimeOfDay selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
