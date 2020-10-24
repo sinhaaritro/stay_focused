@@ -74,7 +74,12 @@ class TimerScreen extends StatelessWidget {
               final TimeOfDay pickededTime = await _pickTime(context);
               if (pickededTime != null) {
                 final DateTime pseudoDateAdded = DateTime(
-                    2020, 1, 31, pickededTime.hour, pickededTime.minute);
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  pickededTime.hour,
+                  pickededTime.minute,
+                );
                 final addNewTimer = context.bloc<TimerBloc>();
                 addNewTimer.add(AddTimerEvent(TimerModel(pseudoDateAdded)));
               }
