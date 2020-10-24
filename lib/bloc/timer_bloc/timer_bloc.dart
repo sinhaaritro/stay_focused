@@ -72,7 +72,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         yield TimerStateLoaded(timerList);
       }
     } catch (_) {
-      yield TimerStateError("Problem with fetch data");
+      yield TimerStateError("Problem with adding data");
     }
   }
 
@@ -89,7 +89,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         yield TimerStateLoaded(timerList);
       }
     } catch (_) {
-      yield TimerStateError("Problem with fetch data");
+      yield TimerStateError("Problem with deleting data");
     }
   }
 }
